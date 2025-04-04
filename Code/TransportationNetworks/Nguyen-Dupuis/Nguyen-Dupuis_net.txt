@@ -1,0 +1,28 @@
+<NUMBER OF ZONES> 24											
+<NUMBER OF NODES> 13											
+<FIRST THRU NODE> 1											
+<NUMBER OF LINKS> 19	
+<ORIGINAL HEADER>~ 	Init node 	Term node 	Capacity 	Length 	Free Flow Time 	B	Power	Speed limit 	Toll 	Type	;
+<END OF METADATA>											
+
+
+~	init_node	term_node	capacity	length	free_flow_time	b	power	speed	toll	link_type	;
+	1	5	800	6	7	0.15	4	0	0	1	;
+	1	12	400	4	9	0.15	4	0	0	1	;
+	4	5	200	6	9	0.15	4	0	0	1	;
+	4	9	800	5	12	0.15	4	0	0	1	;
+	5	6	350	4	3	0.15	4	0	0	1	;
+	5	9	400	4	9	0.15	4	0	0	1	;
+	6	7	800	4	5	0.15	4	0	0	1	;
+	6	10	250	4	13	0.15	4	0	0	1	;
+	7	8	250	2	5	0.15	4	0	0	1	;
+	7	11	300	6	9	0.15	4	0	0	1	;
+	8	2	550	2	9	0.15	4	0	0	1	;
+	9	10	550	4	10	0.15	4	0	0	1	;
+	9	13	600	5	9	0.15	4	0	0	1	;
+	10	11	700	5	6	0.15	4	0	0	1	;
+	11	2	500	4	9	0.15	4	0	0	1	;
+	11	3	300	2	8	0.15	4	0	0	1	;
+	12	6	200	3	7	0.15	4	0	0	1	;
+	12	8	400	2	14	0.15	4	0	0	1	;
+	13	3	600	2	11	0.15	4	0	0	1	;
