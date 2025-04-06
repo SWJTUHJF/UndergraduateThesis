@@ -298,7 +298,6 @@ class FW:
             SPTT += sum([link.cost for link in shortest_path]) * od.demand
         TSTT = sum([link.flow * link.cost for link in self.net.LINKS[1:]])
         cur_gap = (TSTT / SPTT) - 1
-        print(cur_gap)
         return cur_gap
 
 
@@ -404,7 +403,7 @@ def lower_problem(net: Network, ppn):
     net.update_all_link_cost()
     net.update_all_path_cost()
     # main loop
-    iter_times, cur_gap = 0, inf
+    iter_times, cur_gap, cur_gap_list = 0, inf, list()
     while cur_gap >= lower_problem_gap:
         iter_times += 1
         # Step 2: Direction finding
@@ -437,7 +436,8 @@ def lower_problem(net: Network, ppn):
             SPTT += min_dist * od.demand
         TSTT = sum([link.flow * link.cost for link in net.LINKS[1:]])
         cur_gap = (TSTT / SPTT) - 1
-    return sum([link.flow * link.cost for link in net.LINKS[1:]])
+        cur_gap_list.append(cur_gap)
+    return sum([link.flow * link.cost for link in net.LINKS[1:]]), np.array(cur_gap_list)
 
 
 def solutions_enumeration(net: Network, log_out=False):
@@ -449,7 +449,7 @@ def solutions_enumeration(net: Network, log_out=False):
     min_tstt, optimal_solution = inf, None
     solutions = product(range(min_path_number, max_path_number+1), repeat=len(net.OD))
     for solution in solutions:
-        tstt = lower_problem(net, ppn=solution)
+        tstt, _ = lower_problem(net, ppn=solution)
         if tstt < min_tstt:
             min_tstt, optimal_solution = tstt, solution
             print(f"A new minimal TSTT has occurred:\npath={solution}\ntstt={tstt}")
@@ -509,7 +509,7 @@ class SimulatedAnnealing:
         else:
             cur_solution = [initial_num] * len(self.net.OD)
         cur_temperature = initial_temp
-        cur_objective = lower_problem(self.net, cur_solution)
+        cur_objective, _ = lower_problem(self.net, cur_solution)
         best_solution = cur_solution.copy()
         best_objective = cur_objective
         obj = [best_objective]
@@ -537,7 +537,7 @@ class SimulatedAnnealing:
                 candidate = self.multi_point_disruption(cur_solution)
             else:  # later stage
                 candidate = self.single_point_disruption(cur_solution)
-            candidate_objective = lower_problem(self.net, ppn=candidate)
+            candidate_objective, _ = lower_problem(self.net, ppn=candidate)
             # search
             if candidate_objective < cur_objective:
                 cur_solution = candidate.copy()
@@ -589,20 +589,16 @@ class SimulatedAnnealing:
 
 
 def main():
-    sf = Network(name="SiouxFalls", sst=1, model="UE", from_file=True)
-    sf.generate_total_path_set()
-    with open(r'results\SA250331_124031\solution_lists\9282iter.pkl', 'rb') as f:
-        ppn = pickle.load(f)
-    # print(lower_problem(sf, ppn))
-    # new_ppn = [[0, 0, 0, 0, 0] for _ in range(len(sf.OD))]
-    # for i, od in enumerate(sf.OD):
-    #     for j, path in enumerate(od.potential_path_set):
-    #         if path.path_flow != 0:
-    #             new_ppn[i][j] = 1
-    # print(new_ppn)
-    # print(lower_problem(sf, new_ppn))
-    sa = SimulatedAnnealing(sf, ppn)
-    sa.run()
+    # sf = Network(name="SiouxFalls", sst=1, model="UE", from_file=True)
+    # sf.generate_total_path_set()
+    nd = Network(name="Nguyen-Dupuis", sst=1, model="UE", from_file=False)
+    nd.generate_total_path_set()
+    for num in range(1, 6):
+        ppn = [num] * len(nd.OD)
+        tstt, _ = lower_problem(nd, ppn)
+        print(tstt)
+    # sa = SimulatedAnnealing(sf, ppn)
+    # sa.run()
 
 
 if __name__ == '__main__':
