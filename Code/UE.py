@@ -323,6 +323,8 @@ class FW:
         for link in self.LINKS:
             link.flow = link.auxiliary_flow
         while cur_gap > self.FWC:
+            if iter_times % 100 == 0:
+                print(iter_times, cur_gap)
             self.update_costs()
             self.all_or_nothing()
             step = self.bisection()
@@ -386,6 +388,6 @@ def list_network_names():
 
 
 if __name__ == "__main__":
-    net = FW(name='Nguyen-Dupuis', algorithm='LS', BC=0.0001, FWC=0.0001, model="UE", sst=1)
+    net = FW(name='SiouxFalls', algorithm='LS', BC=1e-4, FWC=5e-5, model="SO", sst=1)
     net.conduct_FW()
     net.total_system_travel_time()
