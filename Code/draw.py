@@ -223,7 +223,7 @@ def ch2_convergence():
         ppn = [num] * len(nd.OD)
         _, gap_list = lower_problem(nd, ppn)
         total_gap_list.append(gap_list)
-    fig, axes = plt.subplots(2, 2, figsize=(15, 9), sharey=True)
+    fig, axes = plt.subplots(2, 2, figsize=(12, 12), sharey=True)
     for i in range(2):
         for j in range(2):
             axes[i][j].set_xlabel("Number of iteration", fontsize=12)
@@ -289,4 +289,4 @@ def ch2_tstt():
 
 
 if __name__ == '__main__':
-    ch2_tstt()
+    ch2_convergence()
